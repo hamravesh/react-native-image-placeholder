@@ -9,71 +9,90 @@ class ImageLoad extends React.Component {
 
   static defaultProps = {
     isShowActivity: true,
-	};
+  };
 
   constructor(props) {
     super(props);
     this.state = {
       isLoaded: false,
-      isError: false
+      isError: false,
     };
   }
 
-  onLoadEnd(){
+  onLoadEnd() {
     this.setState({
-      isLoaded: true
+      isLoaded: true,
     });
   }
 
-  onError(){
+  onError() {
     this.setState({
-      isError: true
+      isError: true,
     });
   }
 
   render() {
     const {
-      style, source, resizeMode, borderRadius, backgroundColor, children,
-      loadingStyle, placeholderSource, placeholderStyle,
-      customImagePlaceholderDefaultStyle
+      style,
+      source,
+      resizeMode,
+      borderRadius,
+      backgroundColor,
+      children,
+      loadingStyle,
+      placeholderSource,
+      placeholderStyle,
+      customImagePlaceholderDefaultStyle,
+      imageStyle,
     } = this.props;
-    return(
+    return (
       <ImageBackground
         onLoadEnd={this.onLoadEnd.bind(this)}
+        imageStyle={imageStyle}
         onError={this.onError.bind(this)}
         style={[styles.backgroundImage, style]}
         source={source}
         resizeMode={resizeMode}
         borderRadius={borderRadius}
       >
-        {
-          (this.state.isLoaded && !this.state.isError) ? children :
-          <View 
-            style={[styles.viewImageStyles, { borderRadius: borderRadius }, backgroundColor ? { backgroundColor: backgroundColor } : {}]}
+        {this.state.isLoaded && !this.state.isError ? (
+          children
+        ) : (
+          <View
+            style={[
+              styles.viewImageStyles,
+              { borderRadius: borderRadius },
+              backgroundColor ? { backgroundColor: backgroundColor } : {},
+            ]}
           >
-            {
-              (this.props.isShowActivity && !this.state.isError) &&
-              <ActivityIndicator
-                style={styles.activityIndicator}
-                size={loadingStyle ? loadingStyle.size : 'small'}
-                color={loadingStyle ? loadingStyle.color : 'gray'}
-              />
-            }
+            {this.props.isShowActivity &&
+              !this.state.isError && (
+                <ActivityIndicator
+                  style={styles.activityIndicator}
+                  size={loadingStyle ? loadingStyle.size : 'small'}
+                  color={loadingStyle ? loadingStyle.color : 'gray'}
+                />
+              )}
             <Image
-              style={placeholderStyle ? placeholderStyle : [styles.imagePlaceholderStyles, customImagePlaceholderDefaultStyle]}
-              source={placeholderSource ? placeholderSource : require('./Images/empty-image.png')}
-            >
-            </Image>
+              style={
+                placeholderStyle
+                  ? placeholderStyle
+                  : [
+                      styles.imagePlaceholderStyles,
+                      customImagePlaceholderDefaultStyle,
+                    ]
+              }
+              source={
+                placeholderSource
+                  ? placeholderSource
+                  : require('./Images/empty-image.png')
+              }
+            />
           </View>
-        }
-        {
-          this.props.children &&
-          <View style={styles.viewChildrenStyles}>
-          {
-            this.props.children
-          }
-          </View>
-        }
+        )}
+        {this.props.children && (
+          <View style={styles.viewChildrenStyles}>{this.props.children}</View>
+        )}
       </ImageBackground>
     );
   }
@@ -92,14 +111,14 @@ const styles = {
     flex: 1,
     backgroundColor: '#e9eef1',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   imagePlaceholderStyles: {
     width: 100,
     height: 100,
     resizeMode: 'contain',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   viewChildrenStyles: {
     top: 0,
@@ -107,8 +126,8 @@ const styles = {
     right: 0,
     bottom: 0,
     position: 'absolute',
-    backgroundColor: 'transparent'
-  }
-}
+    backgroundColor: 'transparent',
+  },
+};
 
 export default ImageLoad;
